@@ -1,477 +1,200 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <script>
-      function getQueryParams() {
-        return new URLSearchParams(window.location.search)
-      }
-
-
-      function combineParams(originalHref, currentParams) {
-        let [baseUrl, originalParamsString] = originalHref.split("?")
-        let originalParams = new URLSearchParams(originalParamsString || "")
-        currentParams.forEach((value, key) => {
-          if (!originalParams.has(key)) {
-            originalParams.append(key, value)
-          }
-        })
-        let finalParamsString = originalParams.toString()
-        return finalParamsString ? `${baseUrl}?${finalParamsString}` : baseUrl
-      }
-
-
-      document.addEventListener("DOMContentLoaded", function () {
-        let buttons = document.querySelectorAll("a")
-        let currentParams = getQueryParams()
-        buttons.forEach(function (button) {
-          let originalHref = button.getAttribute("href")
-          button.setAttribute(
-            "href",
-            combineParams(originalHref, currentParams),
-          )
-        })
-      })
-    </script>
-
-    <script
-      src="https://cdn.utmify.com.br/scripts/utms/latest.js"
-      data-utmify-prevent-xcod-sck
-      data-utmify-is-click-bank
-      async
-      defer
-    ></script>
-
-    <script>
-      window.googlePixelId = "6a2ac28d66b751c4273fa0f3";
-      var a = document.createElement("script");
-      a.setAttribute("async", "");
-      a.setAttribute("defer", "");
-      a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel-google.js");
-      document.head.appendChild(a);
-    </script>
-
-    <script>
-      ;(function () {
-        function getParam(name) {
-          try {
-            return new URL(window.location.href).searchParams.get(name) || ""
-          } catch (e) {
-            return ""
-          }
-        }
-
-        function extractId(value) {
-          if (!value) return ""
-          var parts = value.split("|")
-          return parts.length > 1 ? parts[parts.length - 1] : parts[0]
-        }
-        var utm_source = extractId(getParam("utm_source"))
-        var utm_campaign = extractId(getParam("utm_campaign"))
-        var utm_medium = extractId(getParam("utm_medium"))
-        var utm_content = extractId(getParam("utm_content"))
-        var utm_term = extractId(getParam("utm_term"))
-        if (
-          !utm_source &&
-          !utm_campaign &&
-          !utm_medium &&
-          !utm_content &&
-          !utm_term
-        ) {
-          return
-        }
-        var hopBase = "https://bb94c7fhof448l5annqgc3as3w.hop.clickbank.net"
-        var params = [
-          "aff_sub1=" + encodeURIComponent(utm_source),
-          "aff_sub2=" + encodeURIComponent(utm_campaign),
-          "aff_sub3=" + encodeURIComponent(utm_medium),
-          "aff_sub4=" + encodeURIComponent(utm_content),
-          "aff_sub5=" + encodeURIComponent(utm_term),
-          "unique_aff_sub1=" + encodeURIComponent(utm_source),
-          "unique_aff_sub2=" + encodeURIComponent(utm_campaign),
-          "unique_aff_sub3=" + encodeURIComponent(utm_medium),
-          "unique_aff_sub4=" + encodeURIComponent(utm_content),
-          "unique_aff_sub5=" + encodeURIComponent(utm_term),
-        ]
-        var hopUrl = hopBase + "?" + params.join("&")
-        var iframe = document.createElement("iframe")
-        iframe.src = hopUrl
-        iframe.width = "0"
-        iframe.height = "0"
-        iframe.style.cssText =
-          "display:none;width:0;height:0;border:0;position:absolute;left:-9999px;"
-        iframe.setAttribute("tabindex", "-1")
-        iframe.setAttribute("aria-hidden", "true")
-        iframe.setAttribute("title", "")
-        if (document.body) {
-          document.body.appendChild(iframe)
-        } else {
-          document.addEventListener("DOMContentLoaded", function () {
-            document.body.appendChild(iframe)
-          })
-        }
-        console.log("[HopLink] IDs extraídos:", {
-          aff_sub1: utm_source,
-          aff_sub2: utm_campaign,
-          aff_sub3: utm_medium,
-          aff_sub4: utm_content,
-          aff_sub5: utm_term,
-        })
-        console.log("[HopLink] URL:", hopUrl)
-      })()
-    </script>
-
-    <script>
-      ;(function () {
-        var hopBase = "https://bb94c7fhof448l5annqgc3as3w.hop.clickbank.net"
-
-        function getParam(name) {
-          try {
-            return new URL(window.location.href).searchParams.get(name) || ""
-          } catch (e) {
-            return ""
-          }
-        }
-
-        function extractId(value) {
-          if (!value) return ""
-          var parts = value.split("|")
-          return parts.length > 1 ? parts[parts.length - 1] : parts[0]
-        }
-
-        function buildAndFireHopLink(vturbCk) {
-          var utm_source = extractId(getParam("utm_source"))
-          var utm_campaign = extractId(getParam("utm_campaign"))
-          var utm_medium = extractId(getParam("utm_medium"))
-          var utm_content = extractId(getParam("utm_content"))
-          var utm_term = extractId(getParam("utm_term"))
-
-          var hopUrlObj = new URL(hopBase)
-
-          // Copia todos os parâmetros da URL atual para a hop URL
-          try {
-            var currentParams = new URL(window.location.href).searchParams
-            currentParams.forEach(function (value, key) {
-              if (!hopUrlObj.searchParams.has(key)) {
-                hopUrlObj.searchParams.set(key, value)
-              }
-            })
-          } catch (e) {}
-
-          // Adiciona aff_sub e unique_aff_sub apenas se não existirem
-          var affSubs = {
-            aff_sub1: utm_source || vturbCk || "",
-            aff_sub2: utm_campaign || vturbCk || "",
-            aff_sub3: utm_medium || vturbCk || "",
-            aff_sub4: utm_content || vturbCk || "",
-            aff_sub5: vturbCk || utm_term || "",
-            unique_aff_sub1: utm_source || vturbCk || "",
-            unique_aff_sub2: utm_campaign || vturbCk || "",
-            unique_aff_sub3: utm_medium || vturbCk || "",
-            unique_aff_sub4: utm_content || vturbCk || "",
-            unique_aff_sub5: vturbCk || utm_term || "",
-          }
-
-          for (var key in affSubs) {
-            if (!hopUrlObj.searchParams.has(key)) {
-              hopUrlObj.searchParams.set(key, affSubs[key])
-            }
-          }
-
-          var hopUrl = hopUrlObj.toString()
-
-          var iframe = document.createElement("iframe")
-          iframe.src = hopUrl
-          iframe.width = "0"
-          iframe.height = "0"
-          iframe.style.cssText =
-            "display:none;width:0;height:0;border:0;position:absolute;left:-9999px;"
-          iframe.setAttribute("tabindex", "-1")
-          iframe.setAttribute("aria-hidden", "true")
-          iframe.setAttribute("title", "")
-
-          if (document.body) {
-            document.body.appendChild(iframe)
-          } else {
-            document.addEventListener("DOMContentLoaded", function () {
-              document.body.appendChild(iframe)
-            })
-          }
-
-          console.log("[HopLink] IDs extraídos:", {
-            aff_sub1: utm_source,
-            aff_sub2: utm_campaign,
-            aff_sub3: utm_medium,
-            aff_sub4: utm_content,
-            aff_sub5: vturbCk || utm_term,
-          })
-          console.log("[HopLink] URL:", hopUrl)
-        }
-        var player = document.querySelector("vturb-smartplayer")
-
-        player.addEventListener("player:ready", async function () {
-          try {
-            var url = await player.urlUpdater("https://placeholder.com")
-            var parsedUrl = new URL(url)
-            var paramns = player.config.conversion
-            var vturbCk = ""
-            paramns.forEach((param) => {
-              var value = parsedUrl.searchParams.get(param)
-              if (value) {
-                vturbCk = value
-              }
-            })
-            buildAndFireHopLink(vturbCk)
-          } catch (e) {
-            console.warn("[HopLink] Erro ao obter urlUpdater:", e)
-            buildAndFireHopLink("")
-          }
-        })
-      })()
-    </script>
-
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Reverse Ritual - Special Report</title>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THOR GAME - Carambeí - PR</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;900&family=Rajdhani:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-
-      html,
-      body {
-        height: 100%;
-      }
-
-      body {
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-        font-family: Arial, sans-serif;
-        background: #fff;
-      }
-
-      /* ── MAIN CONTENT ── */
-      main {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 24px 16px 16px;
-        gap: 18px;
-      }
-
-      h1 {
-        font-size: 2.7rem;
-        font-weight: 900;
-        color: #cc0000;
-        text-align: center;
-        line-height: 1.25;
-        max-width: 1000px;
-      }
-
-      /* ── VIDEO THUMBNAIL ── */
-      .fdx-b5y {
-        position: relative;
-        width: 100%;
-        max-width: 780px;
-        cursor: pointer;
-      }
-
-      .fdx-b5y img.ewv-4lm {
-        width: 100%;
-        height: auto;
-        display: block;
-        border-radius: 4px;
-      }
-
-      .gz9-0dh {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 100px;
-        height: 100px;
-        background: rgba(255, 255, 255, 0.85);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        pointer-events: none;
-      }
-
-      .gz9-0dh svg {
-        width: 30px;
-        height: 30px;
-        fill: #333;
-        margin-left: 4px;
-      }
-
-      /* ── CTA ── */
-      .r6p-4uq {
-        font-size: 1rem;
-        font-weight: 700;
-        letter-spacing: 0.12em;
-        color: #cc0000;
-        text-align: center;
-        text-transform: uppercase;
-      }
-
-      .mjs-47y {
-        display: inline-block;
-        background: #cc0000;
-        color: #fff;
-        font-size: 1.3rem;
-        font-weight: bolder;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        text-decoration: none;
-        padding: 18px 52px;
-        border-radius: 4px;
-        border: none;
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-
-      .mjs-47y:hover {
-        background: #aa0000;
-      }
-
-      /* ── FOOTER ── */
-      footer {
-        background: #fff;
-        border-top: 1px solid #e0e0e0;
-        padding: 24px 16px 20px;
-        text-align: center;
-      }
-
-      .upt-0bt {
-        font-size: 0.9rem;
-        color: #333;
-        line-height: 1.7;
-      }
-
-      .dmg-o8j {
-        margin-top: 4px;
-        font-size: 0.9rem;
-      }
-
-      .dmg-o8j a {
-        color: #333;
-        text-decoration: underline;
-      }
-
-      .dmg-o8j a:hover {
-        color: #000;
-      }
-
-      .bz6-x1g {
-        margin-top: 12px;
-        font-size: 0.72rem;
-        color: #666;
-        line-height: 1.6;
-        max-width: 960px;
-        margin-left: auto;
-        margin-right: auto;
-        text-align: center;
-      }
-
-      /* ── MOBILE ── */
-      @media (max-width: 600px) {
-        main {
-          gap: 12px;
-          padding: 2rem 12px 2rem;
+        :root {
+            --bg: #0f0a1e; --dark: #0f0a1e; --accent: #a855f7;
+            --mid: #7c6a9c; --white: #f3eeff; --text: #f3eeff;
         }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+        body { font-family:'Rajdhani', sans-serif; background:var(--bg); color:var(--text); }
 
-        h1 {
-          font-size: 1.8rem;
-          padding: 1rem 0 2rem 0;
+        nav {
+            position:fixed; top:0; width:100%; z-index:200;
+            display:flex; justify-content:space-between; align-items:center;
+            padding:1.2rem 4rem;
+            background:rgba(10,15,26,0.93);
+            backdrop-filter:blur(12px);
+            border-bottom:1px solid rgba(255,255,255,0.07);
         }
+        .nav-brand { font-family:'Orbitron', sans-serif; font-size:1.35rem; color:var(--accent); display:flex; align-items:center; gap:.6rem; }
+        .nav-links { display:flex; gap:2.5rem; list-style:none; }
+        .nav-links a { text-decoration:none; color:var(--text); font-size:.9rem; font-weight:500; position:relative; padding-bottom:4px; }
+        .nav-links a::after { content:''; position:absolute; bottom:0; left:0; width:0; height:2px; background:var(--accent); transition:width .3s; }
+        .nav-links a:hover::after { width:100%; }
 
-        .gz9-0dh {
-          width: 60px;
-          height: 60px;
-        }
+        .hero { padding-top:100px; min-height:95vh; display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:4rem; max-width:1200px; margin:0 auto; padding-left:4rem; padding-right:4rem; }
+        .eyebrow { display:inline-flex; align-items:center; gap:.5rem; background:rgba(255,255,255,0.08); color:var(--accent); padding:.4rem 1rem; border-radius:4px; font-size:.82rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; margin-bottom:1.5rem; border-left:3px solid var(--accent); }
+        .hero h1 { font-family:'Orbitron', sans-serif; font-size:clamp(2.6rem,5vw,4.2rem); line-height:1.1; color:var(--text); margin-bottom:1.5rem; }
+        .hero h1 em { color:var(--accent); font-style:italic; }
+        .hero p { font-size:1.05rem; color:var(--mid); line-height:1.8; max-width:420px; margin-bottom:2.5rem; font-weight:300; }
+        .btn-cta { display:inline-flex; align-items:center; gap:.6rem; background:var(--accent); color:#fff; padding:.9rem 2.2rem; border-radius:6px; text-decoration:none; font-weight:600; font-size:.95rem; box-shadow:0 8px 24px rgba(0,0,0,.25); transition:all .3s; }
+        .btn-cta:hover { opacity:.85; transform:translateY(-2px); }
+        .btn-outline { display:inline-flex; align-items:center; gap:.6rem; border:1.5px solid var(--text); color:var(--text); padding:.9rem 2.2rem; border-radius:6px; text-decoration:none; font-weight:500; font-size:.95rem; transition:all .3s; margin-left:1rem; }
+        .btn-outline:hover { background:var(--text); color:var(--bg); }
 
-        .gz9-0dh svg {
-          width: 20px;
-          height: 20px;
-        }
+        .hero-visual { position:relative; display:flex; justify-content:center; align-items:center; }
+        .hero-circle { width:380px; height:380px; border-radius:50%; background:linear-gradient(135deg, var(--accent), var(--dark)); display:flex; align-items:center; justify-content:center; font-size:7rem; box-shadow:0 30px 80px rgba(0,0,0,.3); animation:bob 4s ease-in-out infinite; }
+        @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+        .bubble { position:absolute; background:var(--white); border-radius:14px; padding:.7rem 1.1rem; box-shadow:0 8px 24px rgba(0,0,0,.12); font-weight:600; font-size:.82rem; color:var(--dark); display:flex; align-items:center; gap:.5rem; }
+        .bubble-1 { top:30px; right:-20px; animation:flt 3s ease-in-out infinite; }
+        .bubble-2 { bottom:60px; left:-30px; animation:flt 3.5s ease-in-out infinite 1s; }
+        @keyframes flt { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
 
-        .r6p-4uq {
-          font-size: 0.8rem;
-          padding: 1rem 0;
-        }
+        .products { background:var(--dark); padding:5rem 4rem; }
+        .products .container { max-width:1200px; margin:0 auto; }
+        .section-header { text-align:center; margin-bottom:3.5rem; }
+        .section-header h2 { font-family:'Orbitron', sans-serif; font-size:2.5rem; color:var(--white); margin-top:.8rem; }
+        .section-header h2 em { color:var(--accent); }
+        .prod-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
+        .prod-card { background:rgba(255,255,255,.06); border-radius:16px; padding:2rem; border:1px solid rgba(255,255,255,.1); transition:all .3s; }
+        .prod-card:hover { background:rgba(255,255,255,.1); transform:translateY(-4px); }
+        .prod-icon { font-size:2.5rem; margin-bottom:1rem; }
+        .prod-card h3 { color:var(--white); font-weight:600; font-size:1.1rem; margin-bottom:.6rem; }
+        .prod-card p { color:rgba(255,255,255,.55); font-size:.92rem; line-height:1.6; font-weight:300; }
 
-        .mjs-47y {
-          font-size: 1.2rem;
-          padding: 14px 28px;
-          width: 90%;
-          text-align: center;
-        }
+        .about { padding:5rem 4rem; }
+        .about .container { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:start; }
+        .about-text h2 { font-family:'Orbitron', sans-serif; font-size:2.3rem; color:var(--dark); margin-bottom:1.5rem; }
+        .about-text p { color:var(--mid); line-height:1.9; font-weight:300; margin-bottom:1rem; }
+        .data-cards { display:flex; flex-direction:column; gap:1rem; }
+        .data-card { background:var(--white); border-radius:12px; padding:1.4rem 1.6rem; box-shadow:0 2px 16px rgba(0,0,0,.06); border-left:4px solid var(--accent); display:grid; grid-template-columns:1fr 1fr; gap:.8rem; }
+        .data-card.alt { border-left-color:var(--mid); }
+        .data-field { display:flex; flex-direction:column; }
+        .data-field .key { font-size:.75rem; font-weight:600; color:#aaa; text-transform:uppercase; letter-spacing:.07em; }
+        .data-field .val { font-size:.95rem; color:var(--dark); font-weight:500; margin-top:2px; }
 
-        .bz6-x1g {
-          font-size: 0.65rem;
+        .contact-bar { background:linear-gradient(135deg, var(--accent), var(--dark)); padding:3rem 4rem; text-align:center; }
+        .contact-bar h2 { font-family:'Orbitron', sans-serif; font-size:2rem; color:var(--white); margin-bottom:.5rem; }
+        .contact-bar p { color:rgba(255,255,255,.6); margin-bottom:2rem; font-weight:300; }
+        .contact-pills { display:flex; justify-content:center; gap:1.5rem; flex-wrap:wrap; }
+        .contact-pill { display:flex; align-items:center; gap:.6rem; background:rgba(255,255,255,.12); color:var(--white); padding:.75rem 1.6rem; border-radius:50px; font-size:.9rem; font-weight:500; backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,.2); }
+
+        footer { background:#021520; color:rgba(255,255,255,.4); padding:1.5rem 4rem; text-align:center; font-size:.82rem; }
+
+        @media(max-width:900px) {
+            .hero { grid-template-columns:1fr; padding:1.5rem; }
+            .hero-circle { width:260px; height:260px; font-size:5rem; }
+            .about .container { grid-template-columns:1fr; }
+            .prod-grid { grid-template-columns:1fr; }
+            nav { padding:1rem 1.5rem; }
+            .nav-links { display:none; }
+            .products,.about,.contact-bar { padding:3rem 1.5rem; }
         }
-      }
     </style>
-  </head>
-  <body>
-    <main>
-      <h1>
-        Experts confirm: Old methods don't work<br />discover the new Reverse
-        Ritual now
-      </h1>
+</head>
+<body>
+    <nav>
+        <div class="nav-brand">🎮 THOR GAME</div>
+        <ul class="nav-links">
+            <li><a href="#inicio">Início</a></li>
+            <li><a href="#produtos">Serviços</a></li>
+            <li><a href="#sobre">Sobre</a></li>
+            <li><a href="#contato">Contato</a></li>
+        </ul>
+    </nav>
 
-      <a href="video" class="fdx-b5y">
-        <img class="ewv-4lm" src="image.webp" alt="Reverse Ritual ingredients" />
-        <div class="gz9-0dh">
-          <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" /></svg>
+    <section id="inicio" class="hero">
+        <div class="hero-text">
+            <div class="eyebrow">▶ Carambeí · PR</div>
+            <h1>Eventos que <em>marcam</em></h1>
+            <p>Organização de feiras, congressos, exposições, jogos e eventos esportivos de alto impacto.</p>
+            <a href="#contato" class="btn-cta">Solicite um orçamento →</a>
+            <a href="#produtos" class="btn-outline">Ver Serviços</a>
         </div>
-      </a>
+        <div class="hero-visual">
+            <div class="hero-circle">🎮</div>
+            <div class="bubble bubble-1">🎮 Carambeí - PR</div>
+            <div class="bubble bubble-2">✅ CNPJ Ativo</div>
+        </div>
+    </section>
 
-      <p class="r6p-4uq">Watch the Special Report</p>
+    <section id="produtos" class="products">
+        <div class="container">
+            <div class="section-header">
+                <div class="eyebrow" style="color:var(--accent);background:rgba(255,255,255,.08);border-left-color:var(--accent);">O que Oferecemos</div>
+                <h2>Nossos <em>serviços</em></h2>
+            </div>
+            <div class="prod-grid">
+        <div class="prod-card">
+            <div class="prod-icon">🎮</div>
+            <h3>Gaming Events</h3>
+            <p>Torneios e eventos de jogos eletrônicos e esportivos.</p>
+        </div>
+        <div class="prod-card">
+            <div class="prod-icon">🎪</div>
+            <h3>Feiras e Congressos</h3>
+            <p>Organização completa de feiras, congressos e exposições.</p>
+        </div>
+        <div class="prod-card">
+            <div class="prod-icon">🎭</div>
+            <h3>Artes Cênicas</h3>
+            <p>Espetáculos, shows e atividades culturais complementares.</p>
+        </div>
+        <div class="prod-card">
+            <div class="prod-icon">🏆</div>
+            <h3>Eventos Esportivos</h3>
+            <p>Produção e promoção de eventos esportivos de todos os portes.</p>
+        </div>
+        <div class="prod-card">
+            <div class="prod-icon">🎵</div>
+            <h3>Produção Musical</h3>
+            <p>Eventos musicais e produções artísticas personalizadas.</p>
+        </div>
+        <div class="prod-card">
+            <div class="prod-icon">🏗️</div>
+            <h3>Estruturas</h3>
+            <p>Aluguel de palcos, coberturas e estruturas para eventos.</p>
+        </div></div>
+        </div>
+    </section>
 
-      <a href="video" class="mjs-47y">Click the Button</a>
-    </main>
+    <section id="sobre" class="about">
+        <div class="container">
+            <div class="about-text">
+                <h2>Sobre a THOR GAME</h2>
+                <p>Com CNPJ ativo desde 17/10/2022, a TEXANA EVENTOS LTDA atua com compromisso, qualidade e ética no mercado.</p>
+                <p>Localizada em Carambeí - PR, somos referência no segmento, oferecendo produtos e serviços que superam as expectativas de nossos clientes.</p>
+                <p>Com CNPJ ativo e operações em plena regularidade, garantimos confiança e segurança em cada transação.</p>
+            </div>
+            <div class="data-cards">
+                <div class="data-card">
+                    <div class="data-field"><span class="key">Razão Social</span><span class="val">TEXANA EVENTOS LTDA</span></div>
+                    <div class="data-field"><span class="key">CNPJ</span><span class="val">48.316.371/0001-03</span></div>
+                </div>
+                <div class="data-card alt">
+                    <div class="data-field"><span class="key">Abertura</span><span class="val">17/10/2022</span></div>
+                    <div class="data-field"><span class="key">Situação</span><span class="val">✅ Ativa</span></div>
+                </div>
+                <div class="data-card">
+                    <div class="data-field"><span class="key">Endereço</span><span class="val">Av das Flores, 592 - Centro</span></div>
+                    <div class="data-field"><span class="key">Cidade</span><span class="val">Carambeí - PR</span></div>
+                </div>
+                <div class="data-card alt">
+                    <div class="data-field"><span class="key">CEP</span><span class="val">84.145-000</span></div>
+                    <div class="data-field"><span class="key">Telefone</span><span class="val">(42) 3086-7971</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contato" class="contact-bar">
+        <h2>Entre em Contato</h2>
+        <p>Venha nos visitar ou fale conosco</p>
+        <div class="contact-pills">
+            <div class="contact-pill">📞 (42) 3086-7971</div>
+            <div class="contact-pill">✉️ sommarcontabilidade@gmail.com</div>
+            <div class="contact-pill">📍 Av das Flores, 592 - Centro — Carambeí - PR</div>
+        </div>
+    </section>
 
     <footer>
-      <div class="upt-0bt">
-        Copyright 2026 - TEXANA EVENTOS LTDA<br />
-        All rights reserved
-      </div>
-      <div class="dmg-o8j">
-        <a>Terms of use</a> &nbsp;·&nbsp; <a>Privacy</a>
-      </div>
-      <p class="bz6-x1g">
-        This site is not a part of Google™ website or network of sites such as
-        Youtube™ or any company owned by Google™ or Youtube™. Additionally, this
-        website is not endorsed by Google™ Youtube™ Inc. in any way. Google™ is
-        a trademark for all their respective companies. FDA Compliance The
-        information on this website has not been evaluated by the Food &amp;
-        Drug Administration or any other medical body. We do not aim to
-        diagnose, treat, cure or prevent any illness or disease. Information is
-        shared for educational purposes only. You should always consult your
-        doctor before acting on any content on this website, especially if you
-        are pregnant, nursing, taking medication or have a medical condition.
-        Marketing Disclosure: This website is a marketplace. As such, you should
-        know that the owner has a monetary connection to the product and
-        services advertised on the site. The owner receives payment whenever a
-        qualified lead is referred but that is the extent of it. Advertising
-        Disclosure: This website and the products &amp; services referred to on
-        the site are advertising marketplaces. This website is an advertisement
-        and not a news publication. Any photographs of persons used on this site
-        are models. The owner of this site and the products and services
-        referred to on this site only provides a service where consumers can
-        obtain and compare. Please Read Our Testimonial Disclaimer Here Some
-        names and personal identifying information on this site have been
-        changed to protect the privacy of individuals. No individual result
-        should be seen as typical.
-      </p>
+        CNPJ: 48.316.371/0001-03 · TEXANA EVENTOS LTDA · © 2026 Todos os direitos reservados
     </footer>
-  </body>
+</body>
 </html>
